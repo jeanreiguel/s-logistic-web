@@ -11,6 +11,9 @@ color: #666360;
 display: flex;
 align-items: center;
 
+    svg {
+        margin-right: 16px;
+    }
     & + div {
         margin-top: 8px;
     }

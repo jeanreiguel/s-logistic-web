@@ -6,8 +6,9 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     name: string;
     icon?: React.ComponentType<IconBaseProps>
 }
-const Input: React.FC<InputProps> = ({icon, ...rest}) => (
+const Input: React.FC<InputProps> = ({icon: Icon, ...rest}) => (
     <Container>
+        {Icon && <Icon size={16}/>}
         <input {...rest}/>
     </Container>
 );
