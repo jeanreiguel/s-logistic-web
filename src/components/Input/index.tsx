@@ -25,7 +25,6 @@ const Input: React.FC<InputProps> = ({name, icon: Icon, ...rest}) => {
         setFocus(false);
 
         SetFill(!!inputRef.current?.value);
-        console.log(inputRef)
     }, []);
 
     useEffect(() => {
