@@ -4,17 +4,17 @@ import { Container, Content, Background } from './style'
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { Form } from '@unform/web'
-import getValidationErrors from "../../utils/getValidationErrores";
+import getValidationErrors from "../../utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
 
 import { AuthContext } from "../../context/AuthContext";
 
 interface FormData {
-    email: string,
-    senha: string
+    email: string;
+    senha: string;
 }
-const SingIn: React.FC = () => {
+const SignIn: React.FC = () => {
 
     const formRef = useRef<FormHandles>(null);
 
@@ -29,7 +29,7 @@ const SingIn: React.FC = () => {
                 email: Yup.string()
                 .required('E-mail obrigatório')
                 .email('Informe um e-mail válido'),
-                password: Yup.string()
+                senha: Yup.string()
                 .required("Senha obrigatória"),
             });
     
@@ -41,7 +41,6 @@ const SingIn: React.FC = () => {
                 email: data.email,
                 senha: data.senha
             });
-
         } catch(e) {
             const errors = getValidationErrors(e);
 
@@ -73,4 +72,4 @@ const SingIn: React.FC = () => {
     </Container>
     );
 };
-export default SingIn;
+export default SignIn;
