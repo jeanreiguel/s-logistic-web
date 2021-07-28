@@ -14,7 +14,6 @@ border: 2px solid #232129;
 width: 100%;
 padding: 8px;
 color: #666360;
-
 border: 2px solid #232129;
 color: #666360;
 display: flex;
