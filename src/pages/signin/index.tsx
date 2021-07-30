@@ -8,7 +8,6 @@ import getValidationErrors from "../../utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
 
-import { AuthContext } from "../../context/AuthContext";
 
 interface FormData {
     email: string;
@@ -18,13 +17,12 @@ const SignIn: React.FC = () => {
 
     const formRef = useRef<FormHandles>(null);
 
-    const { signIn } = useContext(AuthContext);
-
     const handleSubmit = useCallback(async (data: FormData) => {
 
         try {
             formRef.current?.setErrors({});
-
+            console.log(data.senha)
+            console.log(data.email)
             const schema = Yup.object().shape({
                 email: Yup.string()
                 .required('E-mail obrigatório')
@@ -37,10 +35,6 @@ const SignIn: React.FC = () => {
                 abortEarly: false,
             });
 
-            signIn({
-                email: data.email,
-                senha: data.senha
-            });
         } catch(e) {
             const errors = getValidationErrors(e);
 
@@ -48,7 +42,7 @@ const SignIn: React.FC = () => {
         }
 
         
-    },[ signIn ]);
+    },[ ]);
 
     return (
 
