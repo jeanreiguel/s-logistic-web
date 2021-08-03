@@ -4,9 +4,11 @@ import { Container, Content, Background } from './style'
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { Form } from '@unform/web'
+
 import getValidationErrors from "../../utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
+import { AuthContext } from "../../context/AuthContext";
 
 
 interface FormData {
@@ -17,6 +19,8 @@ const SignIn: React.FC = () => {
 
     const formRef = useRef<FormHandles>(null);
 
+    const { signIn } = useContext(AuthContext);
+    
     const handleSubmit = useCallback(async (data: FormData) => {
 
         try {
@@ -35,6 +39,10 @@ const SignIn: React.FC = () => {
                 abortEarly: false,
             });
 
+            signIn({
+                email: data.email,
+                senha: data.senha
+            });
         } catch(e) {
             const errors = getValidationErrors(e);
 
@@ -42,7 +50,7 @@ const SignIn: React.FC = () => {
         }
 
         
-    },[ ]);
+    },[ signIn ]);
 
     return (
 
