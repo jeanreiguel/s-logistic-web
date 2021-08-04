@@ -8,8 +8,8 @@ import { Form } from '@unform/web'
 import getValidationErrors from "../../utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
-import { AuthContext } from "../../context/AuthContext";
-
+import { useAuth } from "../../hooks/Auth";
+import { useToast } from "../../hooks/toast"
 
 interface FormData {
     email: string;
@@ -19,8 +19,8 @@ const SignIn: React.FC = () => {
 
     const formRef = useRef<FormHandles>(null);
 
-    const { signIn } = useContext(AuthContext);
-    
+    const { signIn } = useAuth();
+    const { addToast } = useToast();
     const handleSubmit = useCallback(async (data: FormData) => {
 
         try {
@@ -47,10 +47,16 @@ const SignIn: React.FC = () => {
             const errors = getValidationErrors(e);
 
             formRef.current?.setErrors(errors);
+
+            addToast({
+                type: 'error',
+                title: 'Erro de autenticação',
+                description: 'Ocorreu um erro ao fazer login, verifique suas credenciais.',
+            })
         }
 
         
-    },[ signIn ]);
+    },[ signIn, addToast ]);
 
     return (
 

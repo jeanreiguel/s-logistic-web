@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useState} from "react";
+import { useContext } from "react";
 import api from "../service/api";
 
 interface Credentials {
@@ -12,9 +13,10 @@ interface AuthState {
 
 interface ContextData {
     signIn(credentials: Credentials): Promise<void>;
+    signOut(): void;
 }
 
-export const AuthContext = createContext<ContextData>(
+const AuthContext = createContext<ContextData>(
     {} as ContextData
 )
 
@@ -28,7 +30,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     }
 
-    return { } as AuthState;
+    return {} as AuthState;
     });
 
     const signIn = useCallback(async ({ email, senha }) => {
@@ -43,9 +45,25 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     }, []);
 
+    const signOut = useCallback(() => {
+        localStorage.removeItem("@Logistica:token");
+
+        setData({} as AuthState);
+    }, []);
+
     return (
-        <AuthContext.Provider value={{signIn}}>
+        <AuthContext.Provider value={{signIn, signOut}}>
             { children }
         </AuthContext.Provider>
     )
+};
+
+export function useAuth(): ContextData {
+    const context = useContext(AuthContext);
+
+    if(!context) {
+        throw new Error('useAuth must be used withing an AuthProvider')
+    }
+
+    return context;
 }
