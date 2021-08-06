@@ -9,11 +9,13 @@ interface Credentials {
 
 interface AuthState {
     jwt: string;
+    usuario: object,
 }
 
 interface ContextData {
     signIn(credentials: Credentials): Promise<void>;
     signOut(): void;
+    usuario: object,
 }
 
 const AuthContext = createContext<ContextData>(
@@ -24,9 +26,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     const [data, setData] = useState<AuthState>(() => {
         const jwt = localStorage.getItem("@Logistica:token");
+        const usuario = localStorage.getItem("@Logistica:usuario");
 
-    if(jwt) {
-        return { jwt };
+    if(jwt && usuario) {
+        return { jwt, usuario: JSON.parse(usuario) };
 
     }
 
@@ -39,9 +42,10 @@ export const AuthProvider: React.FC = ({ children }) => {
             email,
             senha,
         });
-        const { jwt } = response.data;
+        const { jwt, usuario } = response.data;
         localStorage.setItem("@Logistica:token", jwt);
-            setData(jwt);
+        localStorage.setItem("@Logistica:usuario", JSON.stringify(usuario));
+            setData({jwt, usuario});
 
     }, []);
 
@@ -52,7 +56,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{signIn, signOut}}>
+        <AuthContext.Provider value={{ usuario: data.usuario, signIn, signOut}}>
             { children }
         </AuthContext.Provider>
     )

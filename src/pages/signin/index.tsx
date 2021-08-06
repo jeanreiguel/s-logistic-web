@@ -8,9 +8,9 @@ import { Form } from '@unform/web'
 import getValidationErrors from "../../utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
-import { useAuth } from "../../hooks/Auth";
 import { useToast } from "../../hooks/toast"
-
+import { useAuth } from '../../hooks/Auth'
+import { Link, useHistory } from "react-router-dom";
 interface FormData {
     email: string;
     senha: string;
@@ -21,12 +21,13 @@ const SignIn: React.FC = () => {
 
     const { signIn } = useAuth();
     const { addToast } = useToast();
+    const history = useHistory();
+
     const handleSubmit = useCallback(async (data: FormData) => {
 
         try {
             formRef.current?.setErrors({});
-            console.log(data.senha)
-            console.log(data.email)
+
             const schema = Yup.object().shape({
                 email: Yup.string()
                 .required('E-mail obrigatório')
@@ -39,24 +40,26 @@ const SignIn: React.FC = () => {
                 abortEarly: false,
             });
 
-            signIn({
+            await signIn({
                 email: data.email,
                 senha: data.senha
             });
+            history.push('dashboard')
         } catch(e) {
+           
+            if(e instanceof Yup.ValidationError) {
             const errors = getValidationErrors(e);
-
             formRef.current?.setErrors(errors);
 
+            return
+            }
             addToast({
                 type: 'error',
                 title: 'Erro de autenticação',
                 description: 'Ocorreu um erro ao fazer login, verifique suas credenciais.',
             })
-        }
-
-        
-    },[ signIn, addToast ]);
+        }      
+    },[ signIn, addToast, history ]);
 
     return (
 
@@ -73,7 +76,7 @@ const SignIn: React.FC = () => {
                 <a href="teste">Esqueci minha senha</a>
             </Form>
 
-            <a href="teste"><FiLogIn/> Criar Conta</a>
+            <Link to="signup"><FiLogIn/> Criar Conta</Link>
         </Content>
         <Background/>
 
