@@ -13,7 +13,7 @@ const icons = {
     error: <FiXCircle size={24}/>,
     success: <FiCheckCircle size={24}/>,
 }
-const Toast: React.FC<ToastMessage> = ({ message }) => {
+const Toast: React.FC<ToastMessage> = ({ message, style }) => {
 
     const { removeToast } = useToast();
 

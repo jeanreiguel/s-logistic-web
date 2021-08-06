@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { uuid } from "uuidv4";
 import ToastContainer from "../components/Toast"
 
-interface ToastContext {
+interface ToastContextData {
     addToast(message: Omit<messageContent, "id">): void,
     removeToast(id: string): void
 } 
@@ -14,7 +14,7 @@ export interface messageContent {
     title: string,
     description?: string ,
 }
-const ToastContext =  createContext<ToastContext>({} as ToastContext);
+const ToastContext =  createContext<ToastContextData>({} as ToastContextData);
 
 const ToastProvider: React.FC = ({ children }) => {
 
@@ -45,7 +45,7 @@ const ToastProvider: React.FC = ({ children }) => {
     )
 }
 
-function useToast(): ToastContext {
+function useToast(): ToastContextData {
     const context = useContext(ToastContext);
 
     if(!context) {
